@@ -1,5 +1,5 @@
 import { EventAPI } from "./eventAPI.js";
-
+ 
 function renderEventOptions(select, events) {
   select.innerHTML = '<option value="" disabled selected>Choose an event…</option>';
   if (!events.length) {
@@ -9,6 +9,7 @@ function renderEventOptions(select, events) {
   for (const ev of events) {
     const when = [ev.date, ev.time].filter(Boolean).join(" ");
     const text = when ? `${ev.name} — ${when}` : ev.name;
+    console.log(ev);
     select.insertAdjacentHTML("beforeend", `<option value="${ev.id}">${text}</option>`);
   }
 }

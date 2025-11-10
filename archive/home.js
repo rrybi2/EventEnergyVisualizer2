@@ -17,7 +17,17 @@ function formatDateTime(dateStr, timeStr) {
 
 function populateUpcomingList() {
   const upcomingEvents = EventAPI.getEvents().filter(event => !event.isCompleted); // Get List Of Events and Only Keep Events That Aren't Yet Completed
-  
+  //const now = new Date();
+
+  // const upcomingEvents = currentEvents
+  //   .map(event => ({
+  //     ...event,
+  //     eventDateTime: new Date(`${event.date}T${event.time}`) 
+  //   }))
+  //   .filter(event => event.eventDateTime > now)
+  //   .sort((a, b) => a.eventDateTime - b.eventDateTime)
+  //   .slice(0, 3);
+
   upcomingList.innerHTML = '';
 
   if (upcomingEvents.length === 0) {

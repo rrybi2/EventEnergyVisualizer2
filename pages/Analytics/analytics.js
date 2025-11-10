@@ -1,7 +1,7 @@
 // Get and normalize entries from localStorage
 function getEnergyEntries() {
   const raw = JSON.parse(localStorage.getItem("energyEntries") || "[]");
-
+ 
   return raw
     .map(e => {
       const event = e.event || {};
