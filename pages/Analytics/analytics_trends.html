@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Analytics — Trends</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./analytics_trends_styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="at-container">
+    <nav class="cb-nav">
+      <a class="btn-back" href="./analitycs_main.html">← Back</a>
+    </nav>
+    
+    <h1 class="at-title">Analytics</h1>
+
+    <!-- Bar chart area -->
+    <section class="at-card" aria-label="energy trends">
+      <div style="height:220px;">
+        <canvas id="trendBarChart"></canvas>
+      </div>
+      <p id="trendNoData"
+         style="display:none; text-align:center; margin-top:8px; font-size:14px;">
+        No data available yet.
+      </p>
+    </section>
+
+    <!-- Pie chart and legend section -->
+    <section class="at-row">
+      <figure class="at-card at-pie" aria-label="energizing vs draining">
+        <canvas id="energizingPieChart" width="220" height="220"></canvas>
+      </figure>
+
+      <aside class="at-legend at-card" aria-label="legend">
+        <div class="key">
+          <span class="swatch energizing"></span> Energizing
+        </div>
+        <div class="key">
+          <span class="swatch draining"></span> Draining
+        </div>
+      </aside>
+    </section>
+
+    <!-- Time range buttons -->
+    <nav class="at-actions" aria-label="time range">
+      <button class="at-btn active" type="button" id="btnWeek">This Week</button>
+      <button class="at-btn" type="button" id="btnMonth">This Month</button>
+    </nav>
+  </main>
+
+  <script>
+    // --- MOCK DATA (for design preview only) ---
+    // "This Week": average energy AFTER per day
+    const weekLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const mockWeekData = [2.8, 3.3, 4.1, 3.0, 4.6, 3.8, 4.2];
+
+    // "This Month": average energy AFTER per week of the month
+    const monthLabels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+    const mockMonthWeeklyData = [3.2, 3.8, 4.0, 3.6];
+
+    // Donut chart: mock counts of energizing vs draining events
+    const mockEnergizing = 22;
+    const mockDraining = 8;
+
+    // --- Bar chart (switches between week and month view) ---
+    const barCtx = document.getElementById("trendBarChart").getContext("2d");
+
+    let trendBarChart = new Chart(barCtx, {
+      type: "bar",
+      data: {
+        labels: weekLabels,
+        datasets: [{
+          label: "Avg Energy After",
+          data: mockWeekData,
+          backgroundColor: "#c78c52",
+          borderColor: "#0b0b0b",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false } // hide legend for cleaner look
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 5,
+            ticks: { stepSize: 1 },
+            title: { display: true, text: "Energy (1–5)" }
+          },
+          x: {
+            title: { display: true, text: "Day of Week" }
+          }
+        }
+      }
+    });
+
+    // --- Donut chart (Energizing vs Draining) ---
+    const pieCtx = document.getElementById("energizingPieChart").getContext("2d");
+    const energizingPieChart = new Chart(pieCtx, {
+      type: "doughnut",
+      data: {
+        labels: ["Energizing", "Draining"],
+        datasets: [{
+          data: [mockEnergizing, mockDraining],
+          backgroundColor: ["#d4e1b6", "#c78c52"],
+          borderColor: "#0b0b0b",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: false } // hide legend, we show it manually beside the chart
+        },
+        cutout: "55%" // thickness of the donut center
+      }
+    });
+
+    // --- Buttons: switch between Week and Month charts ---
+    const btnWeek = document.getElementById("btnWeek");
+    const btnMonth = document.getElementById("btnMonth");
+
+    // Toggle active button state (visual feedback)
+    function setActive(button) {
+      [btnWeek, btnMonth].forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+    }
+
+    // "This Week" button click
+    btnWeek.addEventListener("click", () => {
+      setActive(btnWeek);
+
+      // Labels by day of the week
+      trendBarChart.data.labels = weekLabels;
+      trendBarChart.data.datasets[0].data = mockWeekData;
+
+      // Update X-axis title
+      trendBarChart.options.scales.x.title.text = "Day of Week";
+
+      trendBarChart.update();
+    });
+
+    // "This Month" button click
+    btnMonth.addEventListener("click", () => {
+      setActive(btnMonth);
+
+      // Labels by week of the month
+      trendBarChart.data.labels = monthLabels;
+      trendBarChart.data.datasets[0].data = mockMonthWeeklyData;
+
+      // Update X-axis title
+      trendBarChart.options.scales.x.title.text = "Week of Current Month";
+
+      trendBarChart.update();
+    });
+  </script>
+</body>
+</html>

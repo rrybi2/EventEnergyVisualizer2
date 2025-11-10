@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log Energy</title>
+  <link rel="stylesheet" href="../styles/LogEnergy.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="container">
+    <h1>Log Energy</h1>
+
+    <form id="energyForm" class="form" autocomplete="off">
+      <label class="label" for="eventSelect">Event/Activity*</label>
+      <select id="eventSelect" class="select" required>
+        <option value="" disabled selected>Choose an event…</option>
+      </select>
+
+      <fieldset class="group">
+        <legend class="label">Energy Before*</legend>
+        <div class="btn-row" data-name="energyBefore">
+          <input type="radio" id="b1" name="energyBefore" value="10" required>
+          <label for="b1">Very Low</label>
+          <input type="radio" id="b2" name="energyBefore" value="30">
+          <label for="b2">Low</label>
+          <input type="radio" id="b3" name="energyBefore" value="50">
+          <label for="b3">Medium</label>
+          <input type="radio" id="b4" name="energyBefore" value="70">
+          <label for="b4">High</label>
+          <input type="radio" id="b5" name="energyBefore" value="90">
+          <label for="b5">Very High</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend class="label">Energy After*</legend>
+        <div class="btn-row" data-name="energyAfter">
+          <input type="radio" id="a1" name="energyAfter" value="10" required>
+          <label for="a1">Very Low</label>
+          <input type="radio" id="a2" name="energyAfter" value="30">
+          <label for="a2">Low</label>
+          <input type="radio" id="a3" name="energyAfter" value="50">
+          <label for="a3">Medium</label>
+          <input type="radio" id="a4" name="energyAfter" value="70">
+          <label for="a4">High</label>
+          <input type="radio" id="a5" name="energyAfter" value="90">
+          <label for="a5">Very High</label>
+        </div>
+      </fieldset>
+
+      <label class="label" for="notes">Notes (optional)</label>
+      <textarea id="notes" class="textarea" rows="4" placeholder="Add any details…"></textarea>
+
+      <button class="btn" type="submit">Save Entry</button>
+      <button class="btn" onclick="window.location.href='EnergyLogTransition.html'">Back to Home</button>
+    </form>
+  </main>
+
+  <script type="module" src="../source/LogEnergy.js"></script>
+</body>
+</html>

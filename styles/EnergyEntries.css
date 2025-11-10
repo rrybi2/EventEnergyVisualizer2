@@ -1,0 +1,69 @@
+* { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+  margin: 0;
+  background: #fefae0;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: #f5f3dc;
+  border: 4px solid #000;
+  border-radius: 32px;
+  width: min(860px, 94vw);
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+h1 { margin: 0; font-size: 24px; }
+
+.list { display: grid; gap: 12px; }
+
+.card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.event { margin: 0; font-size: 18px; }
+.time { font-size: 12px; opacity: 0.8; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+
+.notes { margin: 8px 0 0; }
+
+.empty { text-align: center; padding: 24px 0; }
+
+.footer { margin-top: 12px; display: flex; justify-content: flex-end; }
+
+.btn {
+  background: #c78c52;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn.mild { background: #ddd0b6; }
+.btn.danger { background: #f7b4a2; }
+.btn.small { padding: 6px 10px; font-size: 13px; }

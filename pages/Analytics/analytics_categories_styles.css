@@ -1,0 +1,172 @@
+/* Variables */
+:root{
+  --bg: #fefae0;      /* page background */
+  --panel: #f5f3dc;   /* container background */
+  --ink: #0b0b0b;     /* black-ish lines */
+  --amber: #c78c52;   /* buttons / warm bars */
+  --mint: #d4e1b6;    /* positive bars */
+  --yellow: #e7d36c;  /* neutral work */
+  --red: #d86755;     /* draining study */
+  --border: 5px;      /* container border weight */
+  --inner: 3.5px;     /* inner borders */
+  --radius: 34px;     /* big rounded container */
+  --font: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+html, body{
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+/* Back button */
+.cb-nav {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.btn-back {
+  text-decoration: none;
+  background: var(--amber);
+  color: var(--ink);
+  border: var(--inner) solid var(--ink);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .02s ease-in, filter .15s ease-in;
+}
+.btn-back:hover { filter: brightness(.96); }
+.btn-back:active { transform: scale(.97); }
+
+/* Outer container */
+.cb-container{
+  width: min(1040px, 92vw);
+  margin: 38px auto;
+  background: var(--panel);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  padding: 40px 48px 56px;
+}
+
+/* Headings */
+.cb-title{
+  margin: 0 0 18px;
+  font-size: 38px;
+  font-weight: 600;
+}
+.cb-sub{
+  margin: 10px 0 18px;
+  font-size: 18px;
+  opacity: .9;
+}
+
+/* --- Top grid --- */
+.cb-top{
+  display: grid;
+  grid-template-columns: 120px 1fr 160px;
+  gap: 16px 20px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+.lbl{ font-size: 18px; }
+.verdict{
+  font-size: 18px;
+  text-align: left;
+}
+
+/* Horizontal bars */
+.hbar .track{
+  width: 100%;
+  height: 28px;
+  border: var(--inner) solid var(--ink);
+  border-radius: 10px;
+  position: relative;
+  background: transparent;
+}
+.hbar .fill{
+  position: absolute; left: 0; top: 0; bottom: 0;
+  border-right: var(--inner) solid var(--ink);
+  border-radius: 8px 0 0 8px;
+  background: var(--mint);
+}
+.hbar.social  .fill{ background: var(--mint); }
+.hbar.work    .fill{ background: var(--yellow); }
+.hbar.study   .fill{ background: var(--red); }
+
+/* --- Middle --- */
+.cb-mid{
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 28px;
+  align-items: start;
+  margin: 14px 0 30px;
+}
+
+.detail-card{
+  border: var(--inner) solid var(--ink);
+  border-radius: 10px;
+  background: #e7f0cf55;
+  padding: 18px 20px;
+}
+.badge{
+  display: inline-block;
+  background: var(--mint);
+  border: var(--inner) solid var(--ink);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+.muted{ opacity: .9; margin: 6px 0; }
+.big{ font-size: 30px; margin: 6px 0 0; }
+
+.quicklist{
+  display: grid;
+  gap: 14px;
+}
+.btn{
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  background: var(--amber);
+  color: var(--ink);
+  border: var(--inner) solid var(--ink);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .02s ease-in, filter .15s ease-in;
+}
+.btn:hover{ filter: brightness(.96); }
+.btn:active{ transform: scale(.99); }
+
+/* --- Bottom legends --- */
+.cb-bottom{
+  display: grid;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.legend-row{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+}
+
+/* Simple CSS icons to match your mock */
+.icon{
+  display: inline-block;
+  width: 28px; height: 28px;
+}
+
+/* Utilities */
+*,
+*::before,
+*::after{ box-sizing: border-box; }

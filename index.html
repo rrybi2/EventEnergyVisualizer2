@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>EEV Dashboard</title>
+
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="styles/global.css" />
+  <link rel="stylesheet" href="styles/home.css" />
+</head>
+<body>
+  <div class="container">
+  
+  <div class="header-box">
+    <h1>EEV Dashboard</h1>
+  </div>
+
+  <section class="content-section">
+    <h2>Upcoming Events</h2>
+    <div id="upcoming-events-container" class="events-container">
+      No Upcoming Events
+    </div>
+  </section>
+
+  <section class="content-section">
+    <h2>Your Trends</h2>
+    <div class="trends-chart">
+      </div>
+  </section>
+
+  <nav class="button-nav">
+    <button onclick="window.location.href='./pages/eventform.html'">
+        Plan Event
+      </button>
+      <button onclick="window.location.href='./pages/EnergyLogTransition.html'">
+        Log Energy
+      </button>
+      <button onclick="window.location.href='./pages/Analytics/analitycs_main.html'">
+        View Analytics
+      </button>
+  </nav>
+
+</div>
+  <script type="module" src="source/home.js"></script>
+</body>
+</html>

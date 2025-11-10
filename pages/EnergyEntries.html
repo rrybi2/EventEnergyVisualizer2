@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Energy Entries</title>
+  <link rel="stylesheet" href="../styles/EnergyEntries.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Your Logged Energy Entries</h1>
+      <a class="btn mild" href="LogEnergy.html">+ New Entry</a>
+    </header>
+
+    <section id="entries" class="list"></section>
+
+    <footer class="footer">
+      <button id="clearAll" class="btn danger">Clear All</button>
+    </footer>
+  </main>
+
+  <script type="module" src="../source/EnergyEntries.js"></script>
+  <button onclick="window.location.href='EnergyLogTransition.html'">Transitions - Temp Button</button>
+</body>
+</html>

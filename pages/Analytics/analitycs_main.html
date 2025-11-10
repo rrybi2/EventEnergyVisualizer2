@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Energy Analytics — Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./analytics_main_styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="ca-container">
+    <nav class="cb-nav">
+      <a class="btn-back" href="../../index.html">← Home</a>
+    </nav>
+    
+    <h1 class="ca-title">Energy Analytics</h1>
+
+    <!-- Trend chart (mock data for now) -->
+    <section class="ca-card ca-chart" aria-label="trend snapshot">
+      <div style="height:260px;">
+        <canvas id="overviewTrend"></canvas>
+      </div>
+      <p id="overviewNoData"
+         style="display:none; text-align:center; margin-top:10px; font-size:14px;">
+        No energy data yet. Log some events to unlock your analytics.
+      </p>
+    </section>
+
+    <!-- KPI triplet -->
+    <section class="ca-kpis">
+      <article class="ca-kpi">
+        <div class="ca-kpi__label">Typical Energy Level<br/>After Each Day</div>
+        <div class="ca-kpi__value" id="kpiAvgEnergy">–</div>
+      </article>
+      <article class="ca-kpi">
+        <div class="ca-kpi__label">Events<br/>Analyzed</div>
+        <div class="ca-kpi__value" id="kpiEvents">–</div>
+      </article>
+      <article class="ca-kpi">
+        <div class="ca-kpi__label">Most Energizing<br/>Category</div>
+        <div class="ca-kpi__value" id="kpiTopCategory">–</div>
+      </article>
+    </section>
+
+    <!-- Actions -->
+    <nav class="ca-actions" aria-label="analytics navigation">
+      <a class="ca-btn" href="./analytics_trends.html">View Patterns</a>
+      <a class="ca-btn" href="./analytics_categories.html">Category Breakdown</a>
+    </nav>
+  </main>
+
+  <script>
+  const rawEntries = JSON.parse(localStorage.getItem('energyEntries')) || [];
+  const entries = rawEntries.map(e => {
+    const delta = e.energyAfter - e.energyBefore;
+    const date = new Date(e.dateLogged);
+    return {
+      ...e,
+      category: e.event?.category || "Uncategorized",
+      delta,
+      date
+    };
+  });
+
+  function computeOverviewMetrics(entries) {
+    if (!entries.length) {
+      return {
+        avgEnergy: null,
+        eventsAnalyzed: 0,
+        topCategory: "N/A"
+      };
+    }
+
+    const eventsAnalyzed = entries.length;
+
+    const avgEnergy =
+      entries.reduce((sum, e) => sum + e.energyAfter, 0) / eventsAnalyzed;
+
+    const categoryStats = {};
+    entries.forEach(e => {
+      const cat = e.category || "Uncategorized";
+      if (!categoryStats[cat]) {
+        categoryStats[cat] = { sumDelta: 0, count: 0 };
+      }
+      categoryStats[cat].sumDelta += e.delta;
+      categoryStats[cat].count++;
+    });
+
+    let topCategory = "N/A";
+    let bestScore = -Infinity;
+
+    Object.entries(categoryStats).forEach(([cat, stat]) => {
+      const avgDelta = stat.sumDelta / stat.count;
+      if (avgDelta > bestScore) {
+        bestScore = avgDelta;
+        topCategory = cat;
+      }
+    });
+
+    return { avgEnergy, eventsAnalyzed, topCategory };
+  }
+
+  function computeWeeklyTrend(entries) {
+    const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const sums = Array(7).fill(0);
+    const counts = Array(7).fill(0);
+
+    entries.forEach(e => {
+      if (!e.date || isNaN(e.date)) return;
+
+      const jsDay = e.date.getDay();
+      const idx = (jsDay + 6) % 7;
+
+      sums[idx] += e.energyAfter;
+      counts[idx]++;
+    });
+
+    const data = sums.map((total, i) =>
+      counts[i] ? total / counts[i] : 0
+    );
+
+    return { labels, data };
+  }
+
+  function getClosestEnergyLabel(avgValue) {
+      const energyLabels = [
+        { label: "Very Low", value: 10 },
+        { label: "Low", value: 30 },
+        { label: "Medium", value: 50 },
+        { label: "High", value: 70 },
+        { label: "Very High", value: 90 }
+      ];
+
+      if (avgValue === null || typeof avgValue === 'undefined') {
+        return "–";
+      }
+
+      const closest = energyLabels.reduce(
+        (prev, curr) => {
+          const prevDiff = Math.abs(prev.value - avgValue);
+          const currDiff = Math.abs(curr.value - avgValue);
+          return (currDiff < prevDiff) ? curr : prev;
+        }
+      );
+      
+      return closest.label;
+    }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const noData = document.getElementById("overviewNoData");
+    const canvas = document.getElementById("overviewTrend");
+    const ctx = canvas.getContext("2d");
+
+    if (!entries.length) {
+      noData.style.display = "block";
+      canvas.style.display = "none";
+      return;
+    }
+      const overview = computeOverviewMetrics(entries);
+      
+      const avgEnergyLabel = getClosestEnergyLabel(overview.avgEnergy);
+      
+      document.getElementById("kpiAvgEnergy").textContent = avgEnergyLabel;
+      document.getElementById("kpiEvents").textContent =
+        overview.eventsAnalyzed;
+      document.getElementById("kpiTopCategory").textContent =
+        overview.topCategory;
+
+    const weekly = computeWeeklyTrend(entries);
+
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: weekly.labels,
+        datasets: [{
+          label: "Avg Energy After per Day",
+          data: weekly.data,
+          borderColor: "#d64b3b",
+          backgroundColor: "rgba(214,75,59,0.12)",
+          borderWidth: 3,
+          tension: 0.25,
+          pointRadius: 4,
+          pointBackgroundColor: "#d64b3b",
+          pointBorderColor: "#0b0b0b",
+          pointBorderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: { stepSize: 10 }, 
+            title: {
+              display: true,
+              text: "Energy (1–100)"
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: "Day of Week"
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
