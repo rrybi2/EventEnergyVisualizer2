@@ -17,7 +17,9 @@ function renderEventOptions(select, events) {
 function loadEvents() {
   const select = document.getElementById("eventSelect");
   const events = EventAPI.getEvents();
-  renderEventOptions(select, events);
+  // Filter out completed events - only show uncompleted events
+  const uncompletedEvents = events.filter(ev => !ev.isCompleted);
+  renderEventOptions(select, uncompletedEvents);
 }
 
 function saveEntry(e) {
@@ -45,9 +47,20 @@ function saveEntry(e) {
   entries.push(entry);
   localStorage.setItem("energyEntries", JSON.stringify(entries));
 
+  // Mark the event as completed
+  if (eventId && ev) {
+    const energyDifference = energyAfter - energyBefore;
+    const points = energyDifference;
+    EventAPI.completeEvent(eventId, ev.time, points);
+  }
+
   form.reset();
   document.querySelectorAll(".btn-row label").forEach(l => l.classList.remove("selected"));
-  alert("Energy entry saved!");
+  
+  // Reload events to refresh the dropdown
+  loadEvents();
+  
+  alert("Energy entry saved and event marked as complete!");
 }
 
 function initUISelections() {
