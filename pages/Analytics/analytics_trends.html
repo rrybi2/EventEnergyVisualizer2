@@ -13,7 +13,7 @@
 <body>
   <main class="at-container">
     <nav class="cb-nav">
-      <a class="btn-back" href="./analitycs_main.html">← Back</a>
+      <a class="btn-back" href="./analytics_main.html">← Back</a>
     </nav>
     
     <h1 class="at-title">Analytics</h1>
@@ -52,19 +52,79 @@
     </nav>
   </main>
 
-  <script>
-    // --- MOCK DATA (for design preview only) ---
-    // "This Week": average energy AFTER per day
-    const weekLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const mockWeekData = [2.8, 3.3, 4.1, 3.0, 4.6, 3.8, 4.2];
+  <script type="module">
+    import { EventAPI } from '../../source/eventAPI.js';
 
-    // "This Month": average energy AFTER per week of the month
-    const monthLabels = ["Week 1", "Week 2", "Week 3", "Week 4"];
-    const mockMonthWeeklyData = [3.2, 3.8, 4.0, 3.6];
+    // Get completed events from EventAPI
+    const completedEvents = EventAPI.getEvents().filter(e => e.isCompleted);
+    const entries = completedEvents.map(e => ({
+      ...e,
+      date: new Date(`${e.date} ${e.time}`),
+      delta: e.points
+    }));
 
-    // Donut chart: mock counts of energizing vs draining events
-    const mockEnergizing = 22;
-    const mockDraining = 8;
+    // Calculate weekly trend (Mon-Sun, average points per day)
+    function computeWeeklyTrend(entries) {
+      const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const sums = Array(7).fill(0);
+      const counts = Array(7).fill(0);
+
+      entries.forEach(e => {
+        if (!e.date || isNaN(e.date)) return;
+        const jsDay = e.date.getDay();
+        const idx = (jsDay + 6) % 7; // Convert JS day (0=Sun) to Mon-Sun index
+        sums[idx] += e.points;
+        counts[idx]++;
+      });
+
+      const data = sums.map((s, i) => (counts[i] ? s / counts[i] : 0));
+      return { labels, data };
+    }
+
+    // Calculate monthly trend (average points per week of current month)
+    function computeMonthlyTrend(entries) {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+      
+      // Filter events from current month
+      const thisMonthEntries = entries.filter(e => {
+        if (!e.date) return false;
+        return e.date.getMonth() === currentMonth && e.date.getFullYear() === currentYear;
+      });
+
+      // Group by week (1-4)
+      const weekLabels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+      const sums = Array(4).fill(0);
+      const counts = Array(4).fill(0);
+
+      thisMonthEntries.forEach(e => {
+        const dayOfMonth = e.date.getDate();
+        const weekIndex = Math.min(Math.floor((dayOfMonth - 1) / 7), 3); // 0-3
+        sums[weekIndex] += e.points;
+        counts[weekIndex]++;
+      });
+
+      const data = sums.map((s, i) => (counts[i] ? s / counts[i] : 0));
+      return { labels: weekLabels, data };
+    }
+
+    // Count energizing vs draining events
+    function computeEnergizingVsDraining(entries) {
+      let energizing = 0;
+      let draining = 0;
+
+      entries.forEach(e => {
+        if (e.points > 0) energizing++;
+        else if (e.points < 0) draining++;
+      });
+
+      return { energizing, draining };
+    }
+
+    const weeklyData = computeWeeklyTrend(entries);
+    const monthlyData = computeMonthlyTrend(entries);
+    const { energizing, draining } = computeEnergizingVsDraining(entries);
 
     // --- Bar chart (switches between week and month view) ---
     const barCtx = document.getElementById("trendBarChart").getContext("2d");
@@ -72,10 +132,10 @@
     let trendBarChart = new Chart(barCtx, {
       type: "bar",
       data: {
-        labels: weekLabels,
+        labels: weeklyData.labels,
         datasets: [{
-          label: "Avg Energy After",
-          data: mockWeekData,
+          label: "Avg Points Impact",
+          data: weeklyData.data,
           backgroundColor: "#c78c52",
           borderColor: "#0b0b0b",
           borderWidth: 2
@@ -90,9 +150,10 @@
         scales: {
           y: {
             beginAtZero: true,
-            max: 5,
-            ticks: { stepSize: 1 },
-            title: { display: true, text: "Energy (1–5)" }
+            suggestedMin: -50,
+            suggestedMax: 50,
+            ticks: { stepSize: 10 },
+            title: { display: true, text: "Points Impact" }
           },
           x: {
             title: { display: true, text: "Day of Week" }
@@ -108,7 +169,7 @@
       data: {
         labels: ["Energizing", "Draining"],
         datasets: [{
-          data: [mockEnergizing, mockDraining],
+          data: [energizing, draining],
           backgroundColor: ["#d4e1b6", "#c78c52"],
           borderColor: "#0b0b0b",
           borderWidth: 2
@@ -137,8 +198,8 @@
       setActive(btnWeek);
 
       // Labels by day of the week
-      trendBarChart.data.labels = weekLabels;
-      trendBarChart.data.datasets[0].data = mockWeekData;
+      trendBarChart.data.labels = weeklyData.labels;
+      trendBarChart.data.datasets[0].data = weeklyData.data;
 
       // Update X-axis title
       trendBarChart.options.scales.x.title.text = "Day of Week";
@@ -151,8 +212,8 @@
       setActive(btnMonth);
 
       // Labels by week of the month
-      trendBarChart.data.labels = monthLabels;
-      trendBarChart.data.datasets[0].data = mockMonthWeeklyData;
+      trendBarChart.data.labels = monthlyData.labels;
+      trendBarChart.data.datasets[0].data = monthlyData.data;
 
       // Update X-axis title
       trendBarChart.options.scales.x.title.text = "Week of Current Month";
