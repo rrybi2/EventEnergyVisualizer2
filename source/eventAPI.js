@@ -116,10 +116,9 @@ export const EventAPI = (() => {
             throw new Error('points is required');
         }
 
-        // Validate points range
         const numericPoints = Number(points);
-        if (isNaN(numericPoints) || numericPoints < -3 || numericPoints > 3) {
-            throw new Error('points must be a number between -3 and 3');
+        if (isNaN(numericPoints)) {
+            throw new Error('points must be a number');
         }
 
         const events = getAllEventsFromStorage();

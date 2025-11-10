@@ -1,8 +1,10 @@
+import { EventAPI } from "./eventAPI.js";
+
 const list = document.getElementById("eventList");
 
     function render() {
       list.innerHTML = "";
-      const planned = JSON.parse(localStorage.getItem("plannedEvents") || "[]");
+      const planned = EventAPI.getEvents();
 
       if (planned.length === 0) {
         list.innerHTML = "<li><em>No events saved</em></li>";
@@ -20,20 +22,21 @@ const list = document.getElementById("eventList");
       const name = document.getElementById("eventName").value.trim();
       const date = document.getElementById("eventDate").value;
       const time = document.getElementById("eventTime").value;
+      const category = document.getElementById("eventCategory").value || "General";
 
       if (!name || !date || !time) return alert("Please fill out all fields.");
 
-      const planned = JSON.parse(localStorage.getItem("plannedEvents") || "[]");
+      const planned = EventAPI.getEvents();
 
       // Preventing duplicates by name + date + time
       if (!planned.some(e => e.name === name && e.date === date && e.time === time)) {
-        planned.push({name, date, time});
-        localStorage.setItem("plannedEvents", JSON.stringify(planned));
+        EventAPI.addEvent(date, time, name, category);
       }
 
       document.getElementById("eventName").value = "";
       document.getElementById("eventDate").value = "";
       document.getElementById("eventTime").value = "";
+      document.getElementById("eventCategory").value = "";
       render();
     });
 
