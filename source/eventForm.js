@@ -1,6 +1,5 @@
 import { EventAPI } from "./eventAPI.js";
 
-<<<<<<< HEAD
 function renderDeleteDropdown() {
   const deleteSelect = document.getElementById("deleteEventSelect");
   if (!deleteSelect) return;
@@ -79,26 +78,3 @@ document.getElementById("deleteEvent").addEventListener("click", () => {
 
 // Initialize dropdown on page load
 renderDeleteDropdown();
-=======
-document.getElementById("saveEvent").addEventListener("click", () => {
-  const name = document.getElementById("eventName").value.trim();
-  const date = document.getElementById("eventDate").value;
-  const time = document.getElementById("eventTime").value;
-  const category = document.getElementById("eventCategory").value || "General";
-
-  if (!name || !date || !time) return alert("Please fill out all fields.");
-
-  const planned = EventAPI.getEvents();
-
-  // Preventing duplicates by name + date + time
-  if (!planned.some(e => e.name === name && e.date === date && e.time === time)) {
-    EventAPI.addEvent(date, time, name, category);
-  }
-
-  document.getElementById("eventName").value = "";
-  document.getElementById("eventDate").value = "";
-  document.getElementById("eventTime").value = "";
-
-  window.location.href = "../index.html"; // Navigate To Home After Submiting An Event
-});
->>>>>>> 8b4e2f8bc0a516cfd0d9f7c0c4c3fae65f1b5a76
