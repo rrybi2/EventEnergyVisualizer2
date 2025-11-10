@@ -31,14 +31,17 @@ function saveEntry(e) {
   const ev = events.find(x => x.id === eventId) || null;
 
   const data = new FormData(form);
+  const energyBefore = Number(data.get("energyBefore"));
+  const energyAfter = Number(data.get("energyAfter"));
+  
   const entry = {
     eventId,
     eventName: ev?.name ?? null,
     eventDate: ev?.date ?? null,
     eventTime: ev?.time ?? null,
     eventCategory: ev?.category ?? null,
-    energyBefore: Number(data.get("energyBefore")),
-    energyAfter: Number(data.get("energyAfter")),
+    energyBefore,
+    energyAfter,
     notes: (document.getElementById("notes").value || "").trim(),
     dateLogged: new Date().toISOString()
   };
