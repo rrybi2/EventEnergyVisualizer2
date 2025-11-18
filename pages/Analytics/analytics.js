@@ -1,4 +1,3 @@
-// Get and normalize entries from localStorage
 function getEnergyEntries() {
   const raw = JSON.parse(localStorage.getItem("energyEntries") || "[]");
  
@@ -9,14 +8,14 @@ function getEnergyEntries() {
       let category = "Uncategorized";
       let date = null;
 
-      // Event name
+      
       if (typeof event === "string") {
         name = event || "Untitled Event";
       } else if (typeof event === "object") {
         name = event.name || "Untitled Event";
       }
 
-      // Category (optional, extendable)
+      
       if (typeof event === "object") {
         category =
           event.category ||
@@ -25,7 +24,7 @@ function getEnergyEntries() {
           "Uncategorized";
       }
 
-      // Date: event date/time OR dateLogged
+     
       let dateStr = null;
       if (typeof event === "object") {
         if (event.date && event.time) {
@@ -56,7 +55,7 @@ function getEnergyEntries() {
     .filter(Boolean);
 }
 
-// Overview metrics
+
 function computeOverviewMetrics(entries) {
   if (!entries.length) {
     return {
@@ -97,7 +96,7 @@ function computeOverviewMetrics(entries) {
   };
 }
 
-// Weekly trend (Mon–Sun, average energy AFTER)
+
 function computeWeeklyTrend(entries) {
   const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const sums = Array(7).fill(0);
@@ -105,7 +104,7 @@ function computeWeeklyTrend(entries) {
 
   entries.forEach(e => {
     if (!e.date) return;
-    // JS: 0=Sun..6=Sat -> 0=Mon..6=Sun
+
     const js = e.date.getDay();
     const idx = (js + 6) % 7;
     sums[idx] += e.after;

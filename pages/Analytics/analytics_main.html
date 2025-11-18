@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="./analytics_main_styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -18,7 +17,6 @@
     
     <h1 class="ca-title">Energy Analytics</h1>
 
-    <!-- Trend chart (mock data for now) -->
     <section class="ca-card ca-chart" aria-label="trend snapshot">
       <div style="height:260px;">
         <canvas id="overviewTrend"></canvas>
@@ -29,7 +27,6 @@
       </p>
     </section>
 
-    <!-- KPI triplet -->
     <section class="ca-kpis">
       <article class="ca-kpi">
         <div class="ca-kpi__label">Typical Energy Level<br/>After Each Day</div>
@@ -55,14 +52,13 @@
   <script type="module">
   import { EventAPI } from '../../source/eventAPI.js';
 
-  // Get completed events only from EventAPI
   const rawEntries = EventAPI.getEvents().filter(e => e.isCompleted);
   const entries = rawEntries.map(e => {
     const date = new Date(`${e.date} ${e.time}`);
     return {
       ...e,
       category: e.category || "Uncategorized",
-      delta: e.points, // points represent the energy impact
+      delta: e.points, 
       date
     };
   });
@@ -78,7 +74,7 @@
 
     const eventsAnalyzed = entries.length;
 
-    // Calculate average points (energy impact)
+
     const avgPoints =
       entries.reduce((sum, e) => sum + e.points, 0) / eventsAnalyzed;
 
@@ -117,7 +113,7 @@
       const jsDay = e.date.getDay();
       const idx = (jsDay + 6) % 7;
 
-      sums[idx] += e.points; // Use points instead of energyAfter
+      sums[idx] += e.points;
       counts[idx]++;
     });
 

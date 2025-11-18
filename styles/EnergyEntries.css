@@ -67,3 +67,33 @@ h1 { margin: 0; font-size: 24px; }
 .btn.mild { background: #ddd0b6; }
 .btn.danger { background: #f7b4a2; }
 .btn.small { padding: 6px 10px; font-size: 13px; }
+
+
+.energy-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 2px solid #000;
+}
+
+
+.energy-10 {
+  background-color: #e57373;
+}
+
+.energy-30 {
+  background-color: #ffb74d;
+}
+
+.energy-50 {
+  background-color: #fff176;
+}
+
+.energy-70 {
+  background-color: #aed581; 
+}
+
+.energy-90 {
+  background-color: #81c784;
+}

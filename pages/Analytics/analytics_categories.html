@@ -7,12 +7,11 @@
   <link rel="stylesheet" href="./analytics_categories_styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <main class="cb-container">
-    <!-- Back button -->
+
     <nav class="cb-nav">
       <a class="btn-back" href="./analytics_main.html">← Back</a>
     </nav>
@@ -20,13 +19,12 @@
     <h1 class="cb-title">Category Breakdown</h1>
     <p class="cb-sub">Compare how each category impacts your energy levels.</p>
 
-    <!-- Top: horizontal bar chart for categories -->
+
     <section class="cb-top" aria-label="category impact chart">
       <div style="grid-column: 1 / -1; height:260px;">
         <canvas id="categoryBarChart"></canvas>
       </div>
 
-      <!-- Message shown only if there is no data (for future real integration) -->
       <p id="cbNoData"
          style="display:none; grid-column:1 / -1; text-align:center; margin-top:8px; font-size:14px;">
         No category data available yet.

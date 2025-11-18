@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="./analytics_trends_styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -18,7 +17,6 @@
     
     <h1 class="at-title">Analytics</h1>
 
-    <!-- Bar chart area -->
     <section class="at-card" aria-label="energy trends">
       <div style="height:220px;">
         <canvas id="trendBarChart"></canvas>
@@ -29,7 +27,6 @@
       </p>
     </section>
 
-    <!-- Pie chart and legend section -->
     <section class="at-row">
       <figure class="at-card at-pie" aria-label="energizing vs draining">
         <canvas id="energizingPieChart" width="220" height="220"></canvas>
@@ -45,7 +42,6 @@
       </aside>
     </section>
 
-    <!-- Time range buttons -->
     <nav class="at-actions" aria-label="time range">
       <button class="at-btn active" type="button" id="btnWeek">This Week</button>
       <button class="at-btn" type="button" id="btnMonth">This Month</button>
@@ -55,7 +51,6 @@
   <script type="module">
     import { EventAPI } from '../../source/eventAPI.js';
 
-    // Get completed events from EventAPI
     const completedEvents = EventAPI.getEvents().filter(e => e.isCompleted);
     const entries = completedEvents.map(e => ({
       ...e,
@@ -63,7 +58,6 @@
       delta: e.points
     }));
 
-    // Calculate weekly trend (Mon-Sun, average points per day)
     function computeWeeklyTrend(entries) {
       const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       const sums = Array(7).fill(0);
@@ -72,7 +66,7 @@
       entries.forEach(e => {
         if (!e.date || isNaN(e.date)) return;
         const jsDay = e.date.getDay();
-        const idx = (jsDay + 6) % 7; // Convert JS day (0=Sun) to Mon-Sun index
+        const idx = (jsDay + 6) % 7;
         sums[idx] += e.points;
         counts[idx]++;
       });
@@ -81,26 +75,23 @@
       return { labels, data };
     }
 
-    // Calculate monthly trend (average points per week of current month)
     function computeMonthlyTrend(entries) {
       const now = new Date();
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
       
-      // Filter events from current month
       const thisMonthEntries = entries.filter(e => {
         if (!e.date) return false;
         return e.date.getMonth() === currentMonth && e.date.getFullYear() === currentYear;
       });
 
-      // Group by week (1-4)
       const weekLabels = ["Week 1", "Week 2", "Week 3", "Week 4"];
       const sums = Array(4).fill(0);
       const counts = Array(4).fill(0);
 
       thisMonthEntries.forEach(e => {
         const dayOfMonth = e.date.getDate();
-        const weekIndex = Math.min(Math.floor((dayOfMonth - 1) / 7), 3); // 0-3
+        const weekIndex = Math.min(Math.floor((dayOfMonth - 1) / 7), 3);
         sums[weekIndex] += e.points;
         counts[weekIndex]++;
       });
@@ -109,7 +100,6 @@
       return { labels: weekLabels, data };
     }
 
-    // Count energizing vs draining events
     function computeEnergizingVsDraining(entries) {
       let energizing = 0;
       let draining = 0;
@@ -126,7 +116,7 @@
     const monthlyData = computeMonthlyTrend(entries);
     const { energizing, draining } = computeEnergizingVsDraining(entries);
 
-    // --- Bar chart (switches between week and month view) ---
+
     const barCtx = document.getElementById("trendBarChart").getContext("2d");
 
     let trendBarChart = new Chart(barCtx, {
@@ -145,7 +135,7 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false } // hide legend for cleaner look
+          legend: { display: false } 
         },
         scales: {
           y: {
@@ -162,7 +152,7 @@
       }
     });
 
-    // --- Donut chart (Energizing vs Draining) ---
+   
     const pieCtx = document.getElementById("energizingPieChart").getContext("2d");
     const energizingPieChart = new Chart(pieCtx, {
       type: "doughnut",
@@ -177,45 +167,40 @@
       },
       options: {
         plugins: {
-          legend: { display: false } // hide legend, we show it manually beside the chart
+          legend: { display: false } 
         },
-        cutout: "55%" // thickness of the donut center
+        cutout: "55%" 
       }
     });
 
-    // --- Buttons: switch between Week and Month charts ---
+
     const btnWeek = document.getElementById("btnWeek");
     const btnMonth = document.getElementById("btnMonth");
 
-    // Toggle active button state (visual feedback)
+    
     function setActive(button) {
       [btnWeek, btnMonth].forEach(btn => btn.classList.remove("active"));
       button.classList.add("active");
     }
 
-    // "This Week" button click
+    
     btnWeek.addEventListener("click", () => {
       setActive(btnWeek);
-
-      // Labels by day of the week
+   
       trendBarChart.data.labels = weeklyData.labels;
       trendBarChart.data.datasets[0].data = weeklyData.data;
 
-      // Update X-axis title
       trendBarChart.options.scales.x.title.text = "Day of Week";
 
       trendBarChart.update();
     });
 
-    // "This Month" button click
     btnMonth.addEventListener("click", () => {
       setActive(btnMonth);
 
-      // Labels by week of the month
       trendBarChart.data.labels = monthlyData.labels;
       trendBarChart.data.datasets[0].data = monthlyData.data;
 
-      // Update X-axis title
       trendBarChart.options.scales.x.title.text = "Week of Current Month";
 
       trendBarChart.update();

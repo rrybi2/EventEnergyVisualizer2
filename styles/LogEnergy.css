@@ -74,3 +74,33 @@ h1 {
   border-radius: 10px;
   padding: 12px 16
 }
+
+#b1 + label,
+#a1 + label {
+  background-color: #e57373;
+}
+
+#b2 + label,
+#a2 + label {
+  background-color: #ffb74d;
+}
+
+#b3 + label,
+#a3 + label {
+  background-color: #fff176;
+}
+
+#b4 + label,
+#a4 + label {
+  background-color: #aed581; 
+}
+
+#b5 + label,
+#a5 + label {
+  background-color: #81c784;
+}
+
+.btn-row label.selected {
+  border-color: #000;
+  filter: brightness(0.95);
+}

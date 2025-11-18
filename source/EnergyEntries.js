@@ -55,8 +55,21 @@ function render() {
         <time class="time">${resolveLoggedDate(e)}</time>
       </div>
       <div class="grid">
-        <p><strong>Before:</strong> ${energyLabels[e.energyBefore]}</p>
-        <p><strong>After:</strong> ${energyLabels[e.energyAfter]}</p>
+
+        <p>
+          <strong>Before:</strong>
+          <span class="energy-badge energy-${e.energyBefore}">
+            ${energyLabels[e.energyBefore]}
+          </span>
+        </p>
+
+        <p>
+          <strong>After:</strong>
+          <span class="energy-badge energy-${e.energyAfter}">
+            ${energyLabels[e.energyAfter]}
+          </span>
+        </p>
+
       </div>
       <p class="energyDif"><strong>Energy Difference:</strong> ${diffDisplay}</p>
       <p class="notes"><strong>Notes:</strong> ${e.notes || "—"}</p>
