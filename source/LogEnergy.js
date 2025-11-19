@@ -1,16 +1,78 @@
 import { EventAPI } from "./eventAPI.js";
- 
+import { pickRandomWellnessActivity } from "./wellnessTips.js";
+
 function renderEventOptions(select, events) {
   select.innerHTML = '<option value="" disabled selected>Choose an event…</option>';
   if (!events.length) {
     select.insertAdjacentHTML("beforeend", '<option disabled>No planned events found</option>');
     return;
-  }
+  } 
   for (const ev of events) {
     const when = [ev.date, ev.time].filter(Boolean).join(" ");
     const text = when ? `${ev.name} — ${when}` : ev.name;
     console.log(ev);
     select.insertAdjacentHTML("beforeend", `<option value="${ev.id}">${text}</option>`);
+  }
+}
+
+function showBurnoutWarning() {
+  const box = document.getElementById("burnoutWarning");
+
+  const activity = pickRandomWellnessActivity();
+
+  // populate modal
+  box.innerHTML = `
+    <button class="close-btn" id="closeWarning">✕</button>
+    <img src="${activity.imageURL}" alt="Wellness activity" class="wellness-img" />
+    <p>${activity.text}</p>
+    <img src="https://example.com/logo.png" alt="Logo" class="wellness-logo" />
+  `;
+
+  box.classList.remove("hidden");
+
+  // reeattach close button handler
+  const closeBtn = document.getElementById("closeWarning");
+  closeBtn?.addEventListener("click", () => {
+    box.classList.remove("show");
+    setTimeout(() => { box.classList.add("hidden"); box.innerHTML = ``;}, 400);
+  });
+
+  requestAnimationFrame(() => box.classList.add("show"));
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const closeBtn = document.getElementById("closeWarning");
+  const box = document.getElementById("burnoutWarning");
+
+  closeBtn?.addEventListener("click", () => {
+    box.classList.remove("show");
+    setTimeout(() => box.classList.add("hidden"), 400);
+  });
+});
+
+
+function checkForBurnout() {
+  const events = EventAPI.getEvents();
+  const completed = events.filter(e => e.isCompleted);
+
+  if (completed.length < 3) return;
+
+  // get last 3 completed events (sorted by time already)
+  const last3 = completed.slice(-3);
+
+  // check if all 3 are draining
+  const allNegative = last3.every(e => e.points < 0);
+  if (!allNegative) return;
+
+  // convert event date + time to a single timestamp
+  const toTimestamp = ev => new Date(`${ev.date}T${ev.time}`).getTime();
+
+  const t1 = toTimestamp(last3[0]);
+  const t3 = toTimestamp(last3[2]);
+
+  // if 3 events within 1 hour interval were all draining promppt a reminder
+  if (t3 - t1 <= 60 * 60 * 1000) {
+    alert("You've had 3 draining events in the last hour. Take a break");
+    showBurnoutWarning();
   }
 }
 
@@ -64,6 +126,7 @@ function saveEntry(e) {
   loadEvents();
   
   alert("Energy entry saved and event marked as complete!");
+  checkForBurnout();
 }
 
 function initUISelections() {
