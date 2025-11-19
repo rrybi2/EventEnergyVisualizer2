@@ -110,8 +110,8 @@ h1 {
   bottom: -200px;              
   left: 50%;
   transform: translateX(-50%);
-  width: 50%;
-  height: 85vh;
+  width: 40%;
+  height: 50vh;
   background: white;
   border: 3px solid #000;
   border-radius: 20px;
@@ -123,7 +123,7 @@ h1 {
 }
 
 .warning.show {
-  bottom: 30px;
+  bottom: 150px;
 }
 
 .hidden {
