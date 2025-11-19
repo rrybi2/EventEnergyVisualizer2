@@ -23,10 +23,17 @@ function showBurnoutWarning() {
   // populate modal
   box.innerHTML = `
     <button class="close-btn" id="closeWarning">✕</button>
-    <img src="${activity.imageURL}" alt="Wellness activity" class="wellness-img" />
+
+    <h2>${activity.prompt}</h2>
     <p>${activity.text}</p>
-    <img src="https://example.com/logo.png" alt="Logo" class="wellness-logo" />
+
+    ${
+      activity.instructions.length
+        ? `<ul>${activity.instructions.map(i => `<li>${i}</li>`).join("")}</ul>`
+        : ""
+    }
   `;
+
 
   box.classList.remove("hidden");
 
@@ -52,7 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function checkForBurnout() {
   const events = EventAPI.getEvents();
-  const completed = events.filter(e => e.isCompleted);
+  const completed = events
+    .filter(e => e.isCompleted)
+    .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
 
   if (completed.length < 3) return;
 
@@ -60,7 +70,7 @@ function checkForBurnout() {
   const last3 = completed.slice(-3);
 
   // check if all 3 are draining
-  const allNegative = last3.every(e => e.points < 0);
+  const allNegative = last3.every(e => Number(e.points) < 0);
   if (!allNegative) return;
 
   // convert event date + time to a single timestamp

@@ -1,17 +1,33 @@
 const wellnessActivities = [
   {
-    imageURL: "https://example.com/breathe.png",
-    text: "Remember to inhale and exhale slowly for a minute."
+    prompt: "Remember To Breathe",
+    text: "Do a slow breathing reset. It helps calm your body and refocus your mind.",
+    instructions: [
+      "Inhale slowly for 4 seconds.",
+      "Hold for 2 seconds.",
+      "Exhale gently for 6 seconds.",
+      "Repeat 5 times."
+    ]
   },
   {
-    imageURL: "https://example.com/stretch.png",
-    text: "Take a moment to stretch your arms and legs."
+    prompt: "Quick Stretch Break",
+    text: "Relieve tension with a quick full-body stretch.",
+    instructions: [
+      "Roll your shoulders backward 5 times.",
+      "Reach both arms overhead and stretch upward.",
+      "Gently rotate your neck left and right."
+    ]
   },
   {
-    imageURL: "https://example.com/hydrate.png",
-    text: "Drink a glass of water to stay hydrated."
+    prompt: "Hydration Check",
+    text: "Give your brain a boost with a sip of water.",
+    instructions: [
+      "Drink a few sips of water.",
+      "Take one slow deep breath."
+    ]
   }
 ];
+
 
 
 export function pickRandomWellnessActivity() {
