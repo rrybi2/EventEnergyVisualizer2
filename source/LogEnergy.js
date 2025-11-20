@@ -1,5 +1,5 @@
 import { EventAPI } from "./eventAPI.js";
-import { pickRandomWellnessActivity } from "./wellnessTips.js";
+import { pickRandomWellnessActivity, motivationContent } from "./wellnessTips.js";
 
 function renderEventOptions(select, events) {
   select.innerHTML = '<option value="" disabled selected>Choose an event…</option>';
@@ -15,46 +15,42 @@ function renderEventOptions(select, events) {
   }
 }
 
-function showBurnoutWarning() {
+function showModal(html) {
   const box = document.getElementById("burnoutWarning");
 
-  const activity = pickRandomWellnessActivity();
-
-  // populate modal
   box.innerHTML = `
     <button class="close-btn" id="closeWarning">✕</button>
-
-    <h2>${activity.prompt}</h2>
-    <p>${activity.text}</p>
-
-    ${
-      activity.instructions.length
-        ? `<ul>${activity.instructions.map(i => `<li>${i}</li>`).join("")}</ul>`
-        : ""
-    }
+    ${html}
   `;
-
 
   box.classList.remove("hidden");
 
-  // reeattach close button handler
-  const closeBtn = document.getElementById("closeWarning");
-  closeBtn?.addEventListener("click", () => {
+  document.getElementById("closeWarning").addEventListener("click", () => {
     box.classList.remove("show");
-    setTimeout(() => { box.classList.add("hidden"); box.innerHTML = ``;}, 400);
+    setTimeout(() => { box.classList.add("hidden"); box.innerHTML = ``; }, 400);
   });
 
   requestAnimationFrame(() => box.classList.add("show"));
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const closeBtn = document.getElementById("closeWarning");
-  const box = document.getElementById("burnoutWarning");
 
-  closeBtn?.addEventListener("click", () => {
-    box.classList.remove("show");
-    setTimeout(() => box.classList.add("hidden"), 400);
-  });
-});
+
+function showBurnoutWarning() {
+  const activity = pickRandomWellnessActivity();
+  showModal(`
+    <h2>${activity.prompt}</h2>
+    <p>${activity.text}</p>
+    ${activity.instructions.length ? `<ul>${activity.instructions.map(i => `<li>${i}</li>`).join("")}</ul>` : ""}
+  `);
+}
+
+function showMotivation() {
+  showModal(`
+    <h2>${motivationContent.prompt}</h2>
+    <p>${motivationContent.text}</p>
+    ${motivationContent.instructions.length ? `<ul>${motivationContent.instructions.map(i => `<li>${i}</li>`).join("")}</ul>` : ""}
+  `);
+}
+
 
 function checkForBurnout() {
   const entries = JSON.parse(localStorage.getItem("energyEntries") || "[]");
@@ -82,6 +78,31 @@ function checkForBurnout() {
   }
 }
 
+function checkForMotivation() {
+  const entries = JSON.parse(localStorage.getItem("energyEntries") || "[]");
+  if (entries.length < 5) return;
+
+  entries.sort((a, b) => new Date(a.dateLogged) - new Date(b.dateLogged));
+  const last5 = entries.slice(-5);
+
+  // make sure last 5 are all positive
+  const allPositive = last5.every(e => (e.energyAfter - e.energyBefore) > 0);
+  if (!allPositive) return;
+
+  // make sure they're all logged on same day
+  const sameDate = last5.every(
+    e => e.dateLogged.slice(0, 10) === last5[0].dateLogged.slice(0, 10)
+  );
+  if (!sameDate) return;
+
+  // must be logged within a 2 hour interval
+  const t1 = new Date(last5[0].dateLogged).getTime();
+  const t5 = new Date(last5[4].dateLogged).getTime();
+
+  if (t5 - t1 <= 2 * 60 * 60 * 1000) {
+    showMotivation(); 
+  }
+}
 
 function loadEvents() {
   const select = document.getElementById("eventSelect");
@@ -134,6 +155,7 @@ function saveEntry(e) {
   
   alert("Energy entry saved and event marked as complete!");
   checkForBurnout();
+  checkForMotivation();
 }
 
 function initUISelections() {

@@ -57,7 +57,16 @@ const wellnessActivities = [
   },
 ];
 
-
+export const motivationContent = {
+    prompt: "Good Work!",
+    text: "You're on a roll. So far you've been able to to complete events with much energy to spare.",
+    instructions: [
+      "Remember to pace yourself!",
+      "Don't forget to stay hydrated.",
+      "Always have time for breaks.",
+      "Continue to have a positve outlook on your day."
+    ]
+};
 
 export function pickRandomWellnessActivity() {
     const activity = wellnessActivities[Math.floor(Math.random() * wellnessActivities.length)];
