@@ -59,27 +59,25 @@ document.addEventListener("DOMContentLoaded", () => {
 function checkForBurnout() {
   const entries = JSON.parse(localStorage.getItem("energyEntries") || "[]");
 
-  // Only completed events with negative points
-  const completedNegative = entries
-    .filter(e => (e.energyAfter - e.energyBefore) < 0)
-    .sort((a, b) => new Date(a.dateLogged) - new Date(b.dateLogged)); // sort ascending
+  entries.sort((a, b) => new Date(a.dateLogged) - new Date(b.dateLogged));
+  if (entries.length < 3) return;
 
-  if (completedNegative.length < 3) return;
+  const last3 = entries.slice(-3);
 
-  // Get last 3 completed negative events
-  const last3 = completedNegative.slice(-3);
+  // make sure last 3 are negative
+  const allNegative = last3.every(e => (e.energyAfter - e.energyBefore) < 0);
+  if (!allNegative) return;
 
-  // Check all are on the same date
+  // check if last 3 were logged on the same day
   const sameDate = last3.every(e => e.dateLogged.slice(0, 10) === last3[0].dateLogged.slice(0, 10));
   if (!sameDate) return;
 
-  // Convert dateLogged to timestamps
   const t1 = new Date(last3[0].dateLogged).getTime();
   const t3 = new Date(last3[2].dateLogged).getTime();
 
-  // Check if they occurred within 1 hour
+  // check if the events were logged within a 1 hour interval
   if (t3 - t1 <= 60 * 60 * 1000) {
-    alert("You've had 3 draining events in the last hour. Take a break ❤️");
+    //alert("You've had 3 draining events in the last hour. Take a break");
     showBurnoutWarning();
   }
 }
