@@ -77,7 +77,7 @@ h1 { margin: 0; font-size: 24px; }
   border: 2px solid #000;
 }
 
-
+ 
 .energy-10 {
   background-color: #e57373;
 }
@@ -96,4 +96,14 @@ h1 { margin: 0; font-size: 24px; }
 
 .energy-90 {
   background-color: #81c784;
+}
+
+.diff-negative {
+  background-color: #fce1e1e7;
+}
+.diff-netural {
+  background-color: #d4ecee;
+}
+.diff-positive {
+  background-color: #e1fcf0e7;
 }

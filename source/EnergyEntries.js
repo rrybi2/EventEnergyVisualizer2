@@ -2,7 +2,7 @@ import { EventAPI } from "./eventAPI.js";
 
 const list = document.getElementById("entries");
 const entries = JSON.parse(localStorage.getItem("energyEntries")) || [];
-
+ 
 const energyLabels = {
   10: "Very Low",
   30: "Low",
@@ -11,6 +11,16 @@ const energyLabels = {
   90: "Very High"
 };
 
+function mapCardColor(entry) {
+  const value = Number(entry.energyAfter - entry.energyBefore);
+  if (value > 0) {
+    return "positive"
+  } else if (value < 0) {
+    return "negative";
+  } else {
+    return "netural";
+  }
+}
 function resolveEventName(entry) {
   if (entry.eventName) return entry.eventName;
   if (entry.event && typeof entry.event === "object" && entry.event.name) return entry.event.name;
@@ -48,7 +58,7 @@ function render() {
     }
 
     const card = document.createElement("article");
-    card.className = "card";
+    card.className = `card diff-${mapCardColor(e)}`;
     card.innerHTML = `
       <div class="card-head">
         <h2 class="event">${resolveEventName(e)}</h2>
