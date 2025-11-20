@@ -35,6 +35,32 @@
         <span class="select-icon" aria-hidden="true">≡</span>
       </div>
 
+      <!-- Recurring Event Toggle -->
+      <div class="row" style="align-items: center; margin-top: 1rem;">
+        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+          <input id="recurringToggle" type="checkbox" style="width: auto; cursor: pointer;" />
+          <span>Make this a recurring event</span>
+        </label>
+      </div>
+
+      <!-- Recurring Options (hidden by default) -->
+      <div id="recurringOptions" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+        <div class="row">
+          <select id="recurringFrequency" class="select">
+            <option value="">Select Frequency</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+          <span class="select-icon" aria-hidden="true">≡</span>
+        </div>
+
+        <div class="row" style="margin-top: 0.5rem;">
+          <label style="display: block; margin-bottom: 0.25rem; font-size: 0.9rem;">End Date:</label>
+          <input id="recurringEndDate" type="date" class="pill" />
+        </div>
+      </div>
+
       <button id="saveEvent" class="primary">Create Event</button>
     </section>
 
