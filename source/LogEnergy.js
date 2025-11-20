@@ -56,35 +56,34 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 function checkForBurnout() {
-  const events = EventAPI.getEvents();
-  const completed = events
-    .filter(e => e.isCompleted)
-    .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+  const entries = JSON.parse(localStorage.getItem("energyEntries") || "[]");
 
+  // Only completed events with negative points
+  const completedNegative = entries
+    .filter(e => (e.energyAfter - e.energyBefore) < 0)
+    .sort((a, b) => new Date(a.dateLogged) - new Date(b.dateLogged)); // sort ascending
 
-  if (completed.length < 3) return;
+  if (completedNegative.length < 3) return;
 
-  // get last 3 completed events (sorted by time already)
-  const last3 = completed.slice(-3);
+  // Get last 3 completed negative events
+  const last3 = completedNegative.slice(-3);
 
-  // check if all 3 are draining
-  const allNegative = last3.every(e => Number(e.points) < 0);
-  if (!allNegative) return;
+  // Check all are on the same date
+  const sameDate = last3.every(e => e.dateLogged.slice(0, 10) === last3[0].dateLogged.slice(0, 10));
+  if (!sameDate) return;
 
-  // convert event date + time to a single timestamp
-  const toTimestamp = ev => new Date(`${ev.date}T${ev.time}`).getTime();
+  // Convert dateLogged to timestamps
+  const t1 = new Date(last3[0].dateLogged).getTime();
+  const t3 = new Date(last3[2].dateLogged).getTime();
 
-  const t1 = toTimestamp(last3[0]);
-  const t3 = toTimestamp(last3[2]);
-
-  // if 3 events within 1 hour interval were all draining promppt a reminder
+  // Check if they occurred within 1 hour
   if (t3 - t1 <= 60 * 60 * 1000) {
-    alert("You've had 3 draining events in the last hour. Take a break");
+    alert("You've had 3 draining events in the last hour. Take a break ❤️");
     showBurnoutWarning();
   }
 }
+
 
 function loadEvents() {
   const select = document.getElementById("eventSelect");

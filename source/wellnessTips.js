@@ -1,33 +1,40 @@
+/* Sources:
+  https://www.goodhousekeeping.com/health/wellness/g25643343/self-care-ideas/
+  https://www.mayoclinic.org/d
+  https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/
+*/
+
 const wellnessActivities = [
   {
     prompt: "Remember To Breathe",
-    text: "Do a slow breathing reset. It helps calm your body and refocus your mind.",
+    text: "Even as your day gets busier, remember to take a moment to breathe.",
     instructions: [
-      "Inhale slowly for 4 seconds.",
-      "Hold for 2 seconds.",
-      "Exhale gently for 6 seconds.",
-      "Repeat 5 times."
-    ]
+      "Let your breath flow as deep down into your belly as comfortable",
+      "Try breathing in through your nose and out through your mouth.",
+      "Breathe in gently and regularly. If it helps steadly count from 1 to 5 while doing this.",
+      "Do this for about 4 minutes"
+    ] 
   },
   {
-    prompt: "Quick Stretch Break",
-    text: "Relieve tension with a quick full-body stretch.",
+    prompt: "Take A Quick Stretch",
+    text: "Stretching is one of the best ways to relax and loosen your body from tension.",
     instructions: [
-      "Roll your shoulders backward 5 times.",
-      "Reach both arms overhead and stretch upward.",
-      "Gently rotate your neck left and right."
+      "Reach the sky with your hands",
+      "Try to roll your arms and do a shoulder stretch",
+      "Extend your arms and turn side to side",
+      "As you go on with your day remember to stretch ocassionally."
     ]
   },
   {
     prompt: "Hydration Check",
-    text: "Give your brain a boost with a sip of water.",
+    text: "Cool down and give your brain a boost with a beverage.",
     instructions: [
       "Drink a few sips of water.",
-      "Take one slow deep breath."
+      "Take one slow deep breath.",
+      "Dehydration can lead to tiredness and dizziness.",
+      "Remember to keep a beverage by your side!"
     ]
   },
-
-
   {
     prompt: "Take A Break!",
     text: "Your completing lots of draining events within a short interval.",
@@ -39,20 +46,13 @@ const wellnessActivities = [
     ]
   },
   {
-    prompt: "Quick Stretch Break",
-    text: "Relieve tension with a quick full-body stretch.",
+    prompt: "Manifest A Positive Attitude",
+    text: "Take a moment to cultivate postivity within yourself",
     instructions: [
-      "Roll your shoulders backward 5 times.",
-      "Reach both arms overhead and stretch upward.",
-      "Gently rotate your neck left and right."
-    ]
-  },
-  {
-    prompt: "Hydration Check",
-    text: "Give your brain a boost with a sip of water.",
-    instructions: [
-      "Drink a few sips of water.",
-      "Take one slow deep breath."
+      "Take a step back and think about your accomplishments",
+      "Cleanse yourself from negatvity.",
+      "Believe in yourself!",
+      "Have an optimistic approach with the rest of your day."
     ]
   },
 ];
