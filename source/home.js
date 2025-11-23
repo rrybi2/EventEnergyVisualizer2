@@ -88,4 +88,91 @@ document.getElementById('nextPage').addEventListener('click', () => {
   }
 });
 
-window.addEventListener('load', populateUpcomingList);
+function createTrendChart() {
+  const canvas = document.getElementById('trendChart');
+  const noDataMsg = document.getElementById('noTrendsData');
+  
+  if (!canvas) return;
+  
+  // Get completed events from EventAPI
+  const completedEvents = EventAPI.getEvents().filter(e => e.isCompleted);
+  
+  if (completedEvents.length === 0) {
+    canvas.style.display = 'none';
+    noDataMsg.style.display = 'block';
+    return;
+  }
+  
+  // Process entries for the chart
+  const entries = completedEvents.map(e => ({
+    date: new Date(`${e.date} ${e.time}`),
+    points: e.points
+  }));
+  
+  // Compute weekly trend (Mon-Sun, average points per day)
+  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const sums = Array(7).fill(0);
+  const counts = Array(7).fill(0);
+  
+  entries.forEach(e => {
+    if (!e.date || isNaN(e.date)) return;
+    const jsDay = e.date.getDay();
+    const idx = (jsDay + 6) % 7; // Convert JS day (0=Sun) to Mon-Sun index
+    sums[idx] += e.points;
+    counts[idx]++;
+  });
+  
+  const data = sums.map((s, i) => (counts[i] ? s / counts[i] : 0));
+  
+  // Create the chart
+  const ctx = canvas.getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Avg Points Impact per Day',
+        data,
+        borderColor: '#d64b3b',
+        backgroundColor: 'rgba(214,75,59,0.12)',
+        borderWidth: 3,
+        tension: 0.25,
+        pointRadius: 4,
+        pointBackgroundColor: '#d64b3b',
+        pointBorderColor: '#0b0b0b',
+        pointBorderWidth: 1.5,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMin: -50,
+          suggestedMax: 50,
+          ticks: { stepSize: 10 },
+          title: {
+            display: true,
+            text: 'Average Points (Impact)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Day of Week'
+          }
+        }
+      }
+    }
+  });
+}
+
+window.addEventListener('load', () => {
+  populateUpcomingList();
+  createTrendChart();
+});
