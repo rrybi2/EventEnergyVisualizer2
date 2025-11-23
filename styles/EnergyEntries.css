@@ -68,6 +68,14 @@ h1 { margin: 0; font-size: 24px; }
 .btn.danger { background: #f7b4a2; }
 .btn.small { padding: 6px 10px; font-size: 13px; }
 
+.backBtn {
+  margin-top: 6px;
+  background: #efc79f;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 9px 9px
+}
 
 .energy-badge {
   display: inline-block;

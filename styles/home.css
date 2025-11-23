@@ -123,3 +123,16 @@ body {
   text-align: left;
   color: #000;
 }
+
+.guideBtn {
+  background: #efc79f;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
