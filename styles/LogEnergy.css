@@ -1,43 +1,78 @@
-* { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  margin: 0;
-  background: #fefae0;
-  min-height: 100vh;
+  background: #FAEDCD;
   display: grid;
   place-items: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .container {
-  background: #f5f3dc;
-  border: 4px solid #000;
-  border-radius: 32px;
-  width: min(760px, 94vw);
-  padding: 24px;
+  background: #f5f1e8;
+  border: 1px solid #000;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-h1 {
-  margin: 0 0 14px;
-  font-size: 24px;
-  font-weight: 600;
+.header-box {
+  background: #a8c48a;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 10px 15px;
   text-align: center;
 }
 
-.form { display: flex; flex-direction: column; gap: 14px; }
+.header-box h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
 
-.label { font-weight: 600; font-size: 14px; }
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
 
 .select, .textarea {
   width: 100%;
-  border: 2px solid #000;
-  border-radius: 10px;
+  border: 1px solid #000;
+  border-radius: 8px;
   background: #fff;
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
 }
 
-.group { border: 0; margin: 0; padding: 0; }
-.group > .label, .group > legend.label { margin-bottom: 8px; }
+.textarea {
+  resize: vertical;
+}
+
+.group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.group > .label, .group > legend.label {
+  margin-bottom: 8px;
+}
 
 .btn-row {
   display: grid;
@@ -45,96 +80,113 @@ h1 {
   gap: 8px;
 }
 
-.btn-row input[type="radio"] { display: none; }
+.btn-row input[type="radio"] {
+  display: none;
+}
 
 .btn-row label {
   user-select: none;
   text-align: center;
-  padding: 10px;
-  border: 2px solid #000;
-  border-radius: 10px;
-  background: #fff;
+  padding: 10px 8px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  background: #e9eddf;
   cursor: pointer;
-  font-size: 14px;
-  transition: transform 0.03s ease-in;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
-.btn-row label:active { transform: scale(0.98); }
-
-.btn-row label.selected {
-  background: #c78c52;
-  border-color: #000;
-}
-
-.btn {
-  margin-top: 6px;
-  background: #c78c52;
-  color: #000;
-  border: 2px solid #000;
-  border-radius: 10px;
-  padding: 9px 8px
-}
-
-.backBtn {
-  margin-top: 6px;
-  background: #efc79f;
-  color: #000;
-  border: 2px solid #000;
-  border-radius: 10px;
-  padding: 6px 6px
+.btn-row label:hover {
+  background: #dde5d0;
 }
 
 #b1 + label,
 #a1 + label {
-  background-color: #e57373;
+  background-color: #f5a5a5;
 }
 
 #b2 + label,
 #a2 + label {
-  background-color: #ffb74d;
+  background-color: #f5c89a;
 }
 
 #b3 + label,
 #a3 + label {
-  background-color: #fff176;
+  background-color: #f5e5a5;
 }
 
 #b4 + label,
 #a4 + label {
-  background-color: #aed581; 
+  background-color: #c4e89a;
 }
 
 #b5 + label,
 #a5 + label {
-  background-color: #81c784;
+  background-color: #a5dfa5;
 }
 
-.btn-row label.selected {
-  border-color: #000;
-  filter: brightness(0.78);
+.btn-row input[type="radio"]:checked + label {
+  background: #c78c52;
+  border: 2px solid #000;
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+  background: #c78c52;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #b87a42;
+}
+
+.back-btn {
+  background: #efc79f;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: #e0b690;
 }
 
 .warning {
   position: fixed;
-  bottom: -200px;              
+  bottom: -200px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  max-width: 500px;
-  height: 50vh;
-  background: white;
-  border: 3px solid #000;
-  border-radius: 20px;
-  overflow-y: scroll;
-  padding: 25px 20px 20px 20px;
+  width: 90%;
+  max-width: 400px;
+  background: #f5f1e8;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 20px 15px 15px 15px;
   text-align: center;
-  font-size: 18px;
+  font-size: 0.95rem;
   transition: bottom 0.4s ease;
   z-index: 9999;
 }
 
 .warning.show {
-  bottom: 150px;
+  bottom: 20px;
 }
 
 .hidden {
@@ -147,7 +199,8 @@ h1 {
   right: 12px;
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 1.2rem;
   cursor: pointer;
   padding: 5px;
+  color: #000;
 }

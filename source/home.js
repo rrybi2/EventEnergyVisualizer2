@@ -1,7 +1,7 @@
 import { EventAPI } from './eventAPI.js'
 
 const upcomingList = document.getElementById('upcoming-events-container');
-const EVENTS_PER_PAGE = 5;
+const EVENTS_PER_PAGE = 3;
 let currentPage = 1;
 let upcomingEvents = [];
  
@@ -26,20 +26,15 @@ function updatePaginationControls() {
   const pageInfo = document.getElementById('pageInfo');
   
   if (totalPages <= 1) {
-    paginationControls.style.display = 'none';
+    paginationControls.classList.remove('show');
     return;
   }
   
-  paginationControls.style.display = 'block';
+  paginationControls.classList.add('show');
   pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
   
   prevBtn.disabled = currentPage === 1;
   nextBtn.disabled = currentPage === totalPages;
-  
-  prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
-  prevBtn.style.cursor = currentPage === 1 ? 'not-allowed' : 'pointer';
-  nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
-  nextBtn.style.cursor = currentPage === totalPages ? 'not-allowed' : 'pointer';
 }
 
 function populateUpcomingList() {
@@ -49,7 +44,7 @@ function populateUpcomingList() {
 
   if (upcomingEvents.length === 0) {
     upcomingList.innerHTML = '<p>No Upcoming Events</p>';
-    document.getElementById('pagination-controls').style.display = 'none';
+    document.getElementById('pagination-controls').classList.remove('show');
     return;
   }
 
@@ -72,7 +67,6 @@ function populateUpcomingList() {
   updatePaginationControls();
 }
 
-// Event listeners for pagination buttons
 document.getElementById('prevPage').addEventListener('click', () => {
   if (currentPage > 1) {
     currentPage--;
@@ -94,7 +88,6 @@ function createTrendChart() {
   
   if (!canvas) return;
   
-  // Get completed events from EventAPI
   const completedEvents = EventAPI.getEvents().filter(e => e.isCompleted);
   
   if (completedEvents.length === 0) {
@@ -102,14 +95,12 @@ function createTrendChart() {
     noDataMsg.style.display = 'block';
     return;
   }
-  
-  // Process entries for the chart
+
   const entries = completedEvents.map(e => ({
     date: new Date(`${e.date} ${e.time}`),
     points: e.points
   }));
   
-  // Compute weekly trend (Mon-Sun, average points per day)
   const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const sums = Array(7).fill(0);
   const counts = Array(7).fill(0);
@@ -117,14 +108,13 @@ function createTrendChart() {
   entries.forEach(e => {
     if (!e.date || isNaN(e.date)) return;
     const jsDay = e.date.getDay();
-    const idx = (jsDay + 6) % 7; // Convert JS day (0=Sun) to Mon-Sun index
+    const idx = (jsDay + 6) % 7; 
     sums[idx] += e.points;
     counts[idx]++;
   });
   
   const data = sums.map((s, i) => (counts[i] ? s / counts[i] : 0));
   
-  // Create the chart
   const ctx = canvas.getContext('2d');
   new Chart(ctx, {
     type: 'line',
@@ -175,4 +165,71 @@ function createTrendChart() {
 window.addEventListener('load', () => {
   populateUpcomingList();
   createTrendChart();
+});
+
+let currentTutorialStep = 0;
+const totalTutorialSteps = 7;
+
+window.showGuide = function() {
+  currentTutorialStep = 0;
+  document.getElementById('tutorialModal').classList.remove('hidden');
+  updateTutorialStep();
+}
+
+window.closeTutorial = function() {
+  document.getElementById('tutorialModal').classList.add('hidden');
+}
+
+window.nextStep = function() {
+  if (currentTutorialStep < totalTutorialSteps - 1) {
+    currentTutorialStep++;
+    updateTutorialStep();
+  }
+}
+
+window.prevStep = function() {
+  if (currentTutorialStep > 0) {
+    currentTutorialStep--;
+    updateTutorialStep();
+  }
+}
+
+function updateTutorialStep() {
+  for (let i = 0; i < totalTutorialSteps; i++) {
+    const step = document.getElementById(`step-${i}`);
+    if (step) step.style.display = 'none';
+  }
+  
+  const currentStep = document.getElementById(`step-${currentTutorialStep}`);
+  if (currentStep) currentStep.style.display = 'block';
+  
+  document.getElementById('stepCounter').textContent = `${currentTutorialStep + 1} of ${totalTutorialSteps}`;
+  
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  if (prevBtn) {
+    if (currentTutorialStep === 0) {
+      prevBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'block';
+    }
+  }
+  
+  if (nextBtn) {
+    if (currentTutorialStep === totalTutorialSteps - 1) {
+      nextBtn.textContent = 'Close';
+      nextBtn.onclick = closeTutorial;
+    } else {
+      nextBtn.textContent = 'Next →';
+      nextBtn.onclick = nextStep;
+    }
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('tutorialModal');
+  if (modal && e.target === modal) {
+    closeTutorial();
+  }
 });

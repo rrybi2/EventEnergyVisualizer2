@@ -3,16 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energy Log Transition</title>
+  <title>Energy Log</title>
+  <link rel="stylesheet" href="../styles/global.css">
   <link rel="stylesheet" href="../styles/EnergyLogTransition.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1><span class="bold">Energy Log -</span> Track how activities affect your energy levels</h1>
-    <button onclick="window.location.href='LogEnergy.html'">Log Energy for an Event</button>
-    <button onclick="window.location.href='EnergyEntries.html'">Check Log Entries</button>
-    <button onclick="window.location.href='../index.html'">Back to Home</button>
+    <div class="header-box">
+      <h1>Energy Log</h1>
+    </div>
+
+    <section class="content-section">
+      <p class="subtitle">Track how activities affect your energy levels</p>
+      
+      <div class="button-grid">
+        <button class="nav-btn" onclick="window.location.href='LogEnergy.html'">
+          <span>Log Energy</span>
+        </button>
+        <button class="nav-btn" onclick="window.location.href='EnergyEntries.html'">
+          <span>View Entries</span>
+        </button>
+      </div>
+    </section>
+
+    <button class="back-btn" onclick="window.location.href='../index.html'">← Back to Home</button>
   </div>
 </body>
 </html>

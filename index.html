@@ -25,10 +25,10 @@
     <div id="upcoming-events-container" class="events-container">
       No Upcoming Events
     </div>
-    <div id="pagination-controls" style="display: none; margin-top: 1rem; text-align: center;">
-      <button id="prevPage" class="pagination-btn" style="margin-right: 1rem;">← Previous</button>
-      <span id="pageInfo" style="margin: 0 1rem;">Page 1</span>
-      <button id="nextPage" class="pagination-btn" style="margin-left: 1rem;">Next →</button>
+    <div id="pagination-controls" class="pagination-controls">
+      <button id="prevPage" class="pagination-btn">←</button>
+      <span id="pageInfo" class="page-info">Page 1</span>
+      <button id="nextPage" class="pagination-btn">→</button>
     </div>
   </section>
 
@@ -54,10 +54,77 @@
       </button>
   </nav>
   <button class="guideBtn" onclick="showGuide()">
-  How EEV Works <- DOES NOT WORK YET
+  How EEV Works
   </button>
 
 </div>
+
+<div id="tutorialModal" class="tutorial-modal hidden">
+  <div class="tutorial-content">
+    <div class="tutorial-header">
+      <h2 id="tutorialTitle">Welcome to EEV</h2>
+      <button class="tutorial-close" onclick="closeTutorial()">✕</button>
+    </div>
+    
+    <div class="tutorial-body">
+      <div class="tutorial-step" id="step-0">
+        <div class="step-icon">📊</div>
+        <h3>Welcome to EEV Dashboard</h3>
+        <p>Event Energy Visualizer helps you track how events affect your energy levels. Let's explore the app together!</p>
+      </div>
+
+      <div class="tutorial-step" id="step-1" style="display: none;">
+        <div class="step-icon">📅</div>
+        <h3>Manage Events</h3>
+        <p>Click "Manage Events" to create or delete your events. Add events that impact your daily energy.</p>
+      </div>
+
+      <div class="tutorial-step" id="step-2" style="display: none;">
+        <div class="step-icon">⚡</div>
+        <h3>Log Energy</h3>
+        <p>After an event, click "Log Energy" to record how it affected your energy levels (positive or negative impact).</p>
+      </div>
+
+      <div class="tutorial-step" id="step-3" style="display: none;">
+        <div class="step-icon">📈</div>
+        <h3>View Analytics</h3>
+        <ul style="text-align: left; margin: 20px 0; line-height: 2.2; list-style: none; padding: 0;">
+          <li style="margin-bottom: 12px;"><strong>Energy Analytics</strong><br><span style="font-size: 15px; color: #555;">Shows your overall energy trends</span></li>
+          <li style="margin-bottom: 12px;"><strong>View Patterns</strong><br><span style="font-size: 15px; color: #555;">Displays energizing vs. draining events</span></li>
+          <li style="margin-bottom: 12px;"><strong>Category Breakdown</strong><br><span style="font-size: 15px; color: #555;">Compares how each event category impacts your energy</span></li>
+        </ul>
+        <p style="margin-top: 20px; font-size: 14px; color: #666;">Use these insights to make better decisions about your events.</p>
+      </div>
+
+      <div class="tutorial-step" id="step-4" style="display: none;">
+        <div class="step-icon">📊</div>
+        <h3>Dashboard Overview</h3>
+        <p>Your dashboard shows upcoming events and your weekly energy trend. Use it to plan your week ahead.</p>
+      </div>
+
+      <div class="tutorial-step" id="step-5" style="display: none;">
+        <div class="step-icon">📊</div>
+        <h3>Understanding Your Chart</h3>
+        <p>The numbers on your trend chart show your average energy impact per day. Positive numbers mean energizing events, negative numbers mean draining events. The scale helps you see at a glance which days were more positive or challenging.</p>
+      </div>
+
+      <div class="tutorial-step" id="step-6" style="display: none;">
+        <div class="step-icon">✨</div>
+        <h3>Ready to Start!</h3>
+        <p>Begin by creating your first event in "Manage Events" and start tracking your energy today.</p>
+      </div>
+    </div>
+
+    <div class="tutorial-footer">
+      <button class="tutorial-btn-prev" onclick="prevStep()" id="prevBtn" style="display: none;">← Back</button>
+      <div class="tutorial-progress">
+        <span id="stepCounter">1 of 6</span>
+      </div>
+      <button class="tutorial-btn-next" onclick="nextStep()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
   <script type="module" src="source/home.js"></script>
 </body>
 </html>

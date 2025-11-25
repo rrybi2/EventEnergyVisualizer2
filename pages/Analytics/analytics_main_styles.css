@@ -1,7 +1,7 @@
 /* Variables */
 :root{
-  --bg: #fefae0;         /* cream background */
-  --panel: #f5f3dc;      /* lighter cream panel */
+  --bg: #FAEDCD;         /* cream background */
+  --panel: #e2f7c8;      /* lighter cream panel */
   --ink: #0b0b0b;        /* near-black strokes */
   --amber: #c78c52;   /* buttons / warm bars */
   --inner: 3.5px;     /* inner borders */

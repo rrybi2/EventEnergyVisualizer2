@@ -16,6 +16,27 @@ body {
   padding: 24px;
 }
 
+.btn-back {
+  text-decoration: none;
+  background: var(--amber);
+  color: var(--ink);
+  border: var(--inner) solid var(--ink);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .02s ease-in, filter .15s ease-in;
+  margin-top: 6px;
+  background: #c78c52;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 5px;
+  padding: 3px 3px
+}
+.btn-back:hover { filter: brightness(.96); }
+.btn-back:active { transform: scale(.97); }
+
 .header {
   display: flex;
   align-items: center;

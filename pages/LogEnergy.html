@@ -4,17 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Log Energy</title>
+  <link rel="stylesheet" href="../styles/global.css">
   <link rel="stylesheet" href="../styles/LogEnergy.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="container">
-    <div id="burnoutWarning" class="warning hidden">
-      <button class="close-btn" id="closeWarning">✕</button>
-      <p>You've had 3 draining events in the last hour. Take a break ❤️</p>
+  <div class="container">
+    <div class="header-box">
+      <h1>Log Energy</h1>
     </div>
 
-    <h1>Log Energy</h1>
+    <div id="burnoutWarning" class="warning hidden">
+      <button class="close-btn" id="closeWarning">✕</button>
+      <p>You've had 3 draining events in the last hour. Take a break</p>
+    </div>
 
     <form id="energyForm" class="form" autocomplete="off">
       <label class="label" for="eventSelect">Event/Activity*</label>
@@ -59,10 +61,10 @@
 
       <button class="btn" type="submit">Save Entry</button>
       <button class="btn" onclick="window.location.href='EnergyEntries.html'">Check your entries</button>
-      <button class="backBtn" onclick="window.location.href='EnergyLogTransition.html'">Back to Energy Log Menu</button>
-      <button class="backBtn" onclick="window.location.href='../index.html'">Back to Home</button>
     </form>
-  </main>
+
+    <button class="back-btn" onclick="window.location.href='../index.html'">← Back to Home</button>
+  </div>
 
   <script type="module" src="../source/LogEnergy.js"></script>
 </body>

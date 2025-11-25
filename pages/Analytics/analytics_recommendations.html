@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Schedule Recommendations — EEV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./analytics_main_styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .rec-intro {
+      text-align: center;
+      font-size: 18px;
+      color: #1a1a1a;
+      margin-bottom: 40px;
+      line-height: 1.8;
+      font-weight: 600;
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .rec-card {
+      border: 4px solid var(--ink);
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fef5e7 0%, #fef0e0 50%, #fdeee0 100%);
+      padding: 32px;
+      display: flex;
+      gap: 24px;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(199, 140, 82, 0.15);
+    }
+
+    .rec-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #e67e22 0%, #c78c52 50%, #d4a574 100%);
+    }
+
+    .rec-card::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      right: -100%;
+      bottom: -100%;
+      background: radial-gradient(circle at 20% 50%, rgba(199, 140, 82, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .rec-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 12px 32px rgba(199, 140, 82, 0.3);
+      background: linear-gradient(135deg, #fff9f0 0%, #fff5e8 50%, #fef0e0 100%);
+    }
+
+    .rec-card:active {
+      transform: translateY(-3px) scale(0.99);
+    }
+
+    .rec-icon {
+      font-size: 56px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #ffe5cc 0%, #ffd9b3 100%);
+      border-radius: 16px;
+      border: 3px solid var(--ink);
+      box-shadow: 0 4px 12px rgba(199, 140, 82, 0.3), inset 0 1px 3px rgba(255,255,255,0.8);
+      position: relative;
+    }
+
+    .rec-content {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .rec-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+      color: #0b0b0b;
+      line-height: 1.35;
+      letter-spacing: -0.3px;
+    }
+
+    .rec-description {
+      font-size: 16px;
+      color: #3a3a3a;
+      margin: 0;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    .rec-empty {
+      text-align: center;
+      margin-top: 56px;
+      padding: 56px 40px;
+      background: linear-gradient(135deg, #ffe5cc 0%, #ffd9b3 100%);
+      border: 4px dashed var(--ink);
+      border-radius: 20px;
+      font-size: 17px;
+      color: #3a3a3a;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(199, 140, 82, 0.2);
+    }
+
+    .rec-empty-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: inline-block;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+  </style>
+</head>
+<body>
+  <main class="ca-container">
+    <nav class="cb-nav">
+      <a class="btn-back" href="./analytics_main.html">← Back</a>
+    </nav>
+    
+    <h1 class="ca-title">Schedule Recommendations</h1>
+
+    <p class="rec-intro">
+      Based on your energy patterns, here are personalized suggestions to optimize your schedule.
+    </p>
+
+    <div id="recommendationsContainer">
+      <div class="rec-empty">
+        <div class="rec-empty-icon">📋</div>
+        <p>No recommendations yet. Log more events to unlock personalized schedule suggestions.</p>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+  import { EventAPI } from '../../source/eventAPI.js';
+
+  function generateRecommendations() {
+    const entries = EventAPI.getEvents().filter(e => e.isCompleted);
+    
+    if (entries.length < 3) {
+      return [];
+    }
+
+    const recommendations = [];
+    
+    // Analyze events by category
+    const categoryStats = {};
+    entries.forEach(event => {
+      const cat = event.category || 'Uncategorized';
+      if (!categoryStats[cat]) {
+        categoryStats[cat] = { total: 0, count: 0, events: [] };
+      }
+      categoryStats[cat].total += event.points;
+      categoryStats[cat].count += 1;
+      categoryStats[cat].events.push(event);
+    });
+
+    // Calculate average impact per category
+    const categoryAvg = {};
+    Object.keys(categoryStats).forEach(cat => {
+      categoryAvg[cat] = categoryStats[cat].total / categoryStats[cat].count;
+    });
+
+    // Sort by impact
+    const sortedByImpact = Object.entries(categoryAvg).sort((a, b) => b[1] - a[1]);
+    
+    if (sortedByImpact.length > 0) {
+      // Recommendation 1: Schedule energizing events first
+      const [topCat, topScore] = sortedByImpact[0];
+      if (topScore > 5) {
+        recommendations.push({
+          title: `Schedule "${topCat}" events early in the week`,
+          description: `Your "${topCat}" events have the highest energy impact (+${topScore.toFixed(1)} points on average). Place them early in the week when you can leverage that boost.`,
+          icon: '⭐'
+        });
+      }
+
+      // Recommendation 2: Manage draining events
+      const [bottomCat, bottomScore] = sortedByImpact[sortedByImpact.length - 1];
+      if (bottomScore < -5) {
+        recommendations.push({
+          title: `Space out "${bottomCat}" events`,
+          description: `Your "${bottomCat}" events are draining (${bottomScore.toFixed(1)} points on average). Avoid clustering them together. Spread them throughout the week with energizing events in between.`,
+          icon: '⏸'
+        });
+      }
+    }
+
+    // Recommendation 3: Balance daily schedule
+    const avgImpact = entries.reduce((sum, e) => sum + e.points, 0) / entries.length;
+    if (avgImpact < -3) {
+      recommendations.push({
+        title: 'Add more energizing events to your routine',
+        description: `Your average daily impact is ${avgImpact.toFixed(1)} points. Consider adding more energizing events to balance out the draining ones.`,
+        icon: '💪'
+      });
+    } else if (avgImpact > 5) {
+      recommendations.push({
+        title: 'Your schedule is well-balanced',
+        description: `Great job! Your average daily impact is ${avgImpact.toFixed(1)} points. Keep maintaining this positive energy throughout your week.`,
+        icon: '✨'
+      });
+    }
+
+    // Recommendation 4: Pattern-based clustering
+    if (sortedByImpact.length >= 2) {
+      const positiveCats = sortedByImpact.filter(([_, score]) => score > 0);
+      const negativeCats = sortedByImpact.filter(([_, score]) => score < 0);
+      
+      if (positiveCats.length > 0 && negativeCats.length > 0) {
+        recommendations.push({
+          title: 'Pair energizing events with challenging ones',
+          description: `Before or after "${negativeCats[0][0]}" events, schedule "${positiveCats[0][0]}" activities to maintain positive energy.`,
+          icon: '🔄'
+        });
+      }
+    }
+
+    return recommendations;
+  }
+
+  function renderRecommendations() {
+    const container = document.getElementById('recommendationsContainer');
+    const recommendations = generateRecommendations();
+
+    if (recommendations.length === 0) {
+      return; // Default message already in HTML
+    }
+
+    container.innerHTML = `
+      <div class="rec-grid">
+        ${recommendations.map(rec => `
+          <div class="rec-card">
+            <div class="rec-icon">${rec.icon}</div>
+            <div class="rec-content">
+              <h3 class="rec-title">${rec.title}</h3>
+              <p class="rec-description">${rec.description}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  renderRecommendations();
+  </script>
+</body>
+</html>
