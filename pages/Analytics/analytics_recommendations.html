@@ -157,7 +157,6 @@
 
     const recommendations = [];
     
-    
     const categoryStats = {};
     entries.forEach(event => {
       const cat = event.category || 'Uncategorized';
@@ -183,7 +182,7 @@
       if (topScore > 5) {
         recommendations.push({
           title: `Schedule "${topCat}" events early in the week`,
-          description: `Your "${topCat}" events have the highest energy impact (+${topScore.toFixed(1)} points on average). Place them early in the week when you can leverage that boost.`,
+          description: `Your "${topCat}" events have the highest energy impact (+${topScore.toFixed(1)} points on average). Try to place these events earlier in your day or week so you can leverage that boost.`,
           icon: '⭐'
         });
       }
@@ -191,8 +190,10 @@
       const [bottomCat, bottomScore] = sortedByImpact[sortedByImpact.length - 1];
       if (bottomScore < -5) {
         recommendations.push({
-          title: `Space out "${bottomCat}" events`,
-          description: `Your "${bottomCat}" events are draining (${bottomScore.toFixed(1)} points on average). Avoid clustering them together. Spread them throughout the week with energizing events in between.`,
+          title: `Protect your energy around "${bottomCat}" events`,
+          description: `"${bottomCat}" events are very draining on average (${bottomScore.toFixed(
+            1
+          )}). Even if you can’t reschedule them, try to buffer them with more energizing or restful activities before and after, and avoid stacking other demanding tasks on the same days when possible.`,
           icon: '⏸'
         });
       }
