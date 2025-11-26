@@ -157,7 +157,7 @@
 
     const recommendations = [];
     
-    // Analyze events by category
+    
     const categoryStats = {};
     entries.forEach(event => {
       const cat = event.category || 'Uncategorized';
@@ -169,17 +169,16 @@
       categoryStats[cat].events.push(event);
     });
 
-    // Calculate average impact per category
+    
     const categoryAvg = {};
     Object.keys(categoryStats).forEach(cat => {
       categoryAvg[cat] = categoryStats[cat].total / categoryStats[cat].count;
     });
 
-    // Sort by impact
+    
     const sortedByImpact = Object.entries(categoryAvg).sort((a, b) => b[1] - a[1]);
     
     if (sortedByImpact.length > 0) {
-      // Recommendation 1: Schedule energizing events first
       const [topCat, topScore] = sortedByImpact[0];
       if (topScore > 5) {
         recommendations.push({
@@ -189,7 +188,6 @@
         });
       }
 
-      // Recommendation 2: Manage draining events
       const [bottomCat, bottomScore] = sortedByImpact[sortedByImpact.length - 1];
       if (bottomScore < -5) {
         recommendations.push({
@@ -200,7 +198,6 @@
       }
     }
 
-    // Recommendation 3: Balance daily schedule
     const avgImpact = entries.reduce((sum, e) => sum + e.points, 0) / entries.length;
     if (avgImpact < -3) {
       recommendations.push({
@@ -216,7 +213,6 @@
       });
     }
 
-    // Recommendation 4: Pattern-based clustering
     if (sortedByImpact.length >= 2) {
       const positiveCats = sortedByImpact.filter(([_, score]) => score > 0);
       const negativeCats = sortedByImpact.filter(([_, score]) => score < 0);
@@ -238,7 +234,7 @@
     const recommendations = generateRecommendations();
 
     if (recommendations.length === 0) {
-      return; // Default message already in HTML
+      return;
     }
 
     container.innerHTML = `
